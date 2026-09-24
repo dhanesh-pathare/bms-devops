@@ -8,13 +8,6 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                git branch: 'main',
-                    url: 'git@github.com:dhanesh-pathare/bms-devops.git'
-            }
-        }
-
         stage('Maven Build') {
             steps {
                 sh 'mvn clean package -DskipTests'
@@ -52,6 +45,7 @@ pipeline {
         success {
             echo 'BMS CI/CD Pipeline completed successfully!'
         }
+
         failure {
             echo 'BMS CI/CD Pipeline failed!'
         }
