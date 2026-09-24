@@ -36,6 +36,9 @@ pipeline {
                         docker push ${IMAGE_NAME}:latest
                         docker logout
                     '''
+                }
+            }
+        }
 
         stage('Deploy BMS') {
             steps {
@@ -63,8 +66,6 @@ pipeline {
                     docker logs bms-app-container --tail 50
                     exit 1
                 '''
-            }
-        }                }
             }
         }
     }
