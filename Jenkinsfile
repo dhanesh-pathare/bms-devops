@@ -54,17 +54,23 @@ pipeline {
 
                     echo "Waiting for BMS application..."
 
-                    for i in {1..12}; do
-                        if curl -fsS http://localhost:8081 >/dev/null; then
+                    for i in $(seq 1 12); do
+                        if curl -fsS http://localhost:8081 >/dev/null 2>&1; then
                             echo "BMS application is UP"
-                            exit 0
+                            break
                         fi
+
+                        echo "Waiting... attempt $i/12"
                         sleep 5
                     done
 
-                    echo "BMS application health check FAILED"
-                    docker logs bms-app-container --tail 50
-                    exit 1
+                    if ! curl -fsS http://localhost:8081 >/dev/null 2>&1; then
+                        echo "BMS application health check FAILED"
+                        docker logs bms-app-container --tail 50
+                        exit 1
+                    fi
+
+                    echo "BMS deployment successful!"
                 '''
             }
         }
